@@ -26,10 +26,23 @@ public class PlanificadorGUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroupPoliticas = new javax.swing.ButtonGroup();
         jPanelControles = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jRadioButtonRRSP = new javax.swing.JRadioButton();
+        jRadioButtonPrioridades = new javax.swing.JRadioButton();
+        jRadioButtonSJF = new javax.swing.JRadioButton();
+        jRadioButtonSRT = new javax.swing.JRadioButton();
+        jLabel2 = new javax.swing.JLabel();
+        jTextFieldQuantum = new javax.swing.JTextField();
+        jButtonIniciar = new javax.swing.JButton();
         jPanelGrafica = new javax.swing.JPanel();
+        jScrollPaneGrafica = new javax.swing.JScrollPane();
+        jPanelDiagrama = new javax.swing.JPanel();
         jPanelStadisticas = new javax.swing.JPanel();
         jPanelLog = new javax.swing.JPanel();
+        jScrollPaneLog = new javax.swing.JScrollPane();
+        jTextAreaLog = new javax.swing.JTextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -37,32 +50,111 @@ public class PlanificadorGUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanelControles.setBackground(new java.awt.Color(153, 153, 255));
+        jPanelControles.setBorder(javax.swing.BorderFactory.createTitledBorder("Controles"));
+
+        jLabel1.setText("Política");
+
+        buttonGroupPoliticas.add(jRadioButtonRRSP);
+        jRadioButtonRRSP.setText("Round Robin");
+
+        buttonGroupPoliticas.add(jRadioButtonPrioridades);
+        jRadioButtonPrioridades.setText("Prioridades");
+
+        buttonGroupPoliticas.add(jRadioButtonSJF);
+        jRadioButtonSJF.setText("SJF");
+
+        buttonGroupPoliticas.add(jRadioButtonSRT);
+        jRadioButtonSRT.setText("SRT");
+
+        jLabel2.setText("Quantum");
+
+        jButtonIniciar.setText("Iniciar");
 
         javax.swing.GroupLayout jPanelControlesLayout = new javax.swing.GroupLayout(jPanelControles);
         jPanelControles.setLayout(jPanelControlesLayout);
         jPanelControlesLayout.setHorizontalGroup(
             jPanelControlesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 159, Short.MAX_VALUE)
+            .addGroup(jPanelControlesLayout.createSequentialGroup()
+                .addGroup(jPanelControlesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelControlesLayout.createSequentialGroup()
+                        .addGroup(jPanelControlesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanelControlesLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel1))
+                            .addGroup(jPanelControlesLayout.createSequentialGroup()
+                                .addGap(34, 34, 34)
+                                .addGroup(jPanelControlesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jRadioButtonPrioridades)
+                                    .addComponent(jRadioButtonRRSP)
+                                    .addComponent(jRadioButtonSJF)
+                                    .addComponent(jRadioButtonSRT)))
+                            .addGroup(jPanelControlesLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel2)
+                                .addGap(18, 18, 18)
+                                .addComponent(jTextFieldQuantum)))
+                        .addGap(0, 18, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelControlesLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButtonIniciar)))
+                .addContainerGap())
         );
         jPanelControlesLayout.setVerticalGroup(
             jPanelControlesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanelControlesLayout.createSequentialGroup()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jRadioButtonRRSP)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jRadioButtonPrioridades)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jRadioButtonSJF)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jRadioButtonSRT)
+                .addGap(18, 18, 18)
+                .addGroup(jPanelControlesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jTextFieldQuantum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButtonIniciar)
+                .addContainerGap())
         );
 
         jPanelGrafica.setBackground(new java.awt.Color(255, 102, 102));
+        jPanelGrafica.setBorder(javax.swing.BorderFactory.createTitledBorder("Gráfica"));
+
+        javax.swing.GroupLayout jPanelDiagramaLayout = new javax.swing.GroupLayout(jPanelDiagrama);
+        jPanelDiagrama.setLayout(jPanelDiagramaLayout);
+        jPanelDiagramaLayout.setHorizontalGroup(
+            jPanelDiagramaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 369, Short.MAX_VALUE)
+        );
+        jPanelDiagramaLayout.setVerticalGroup(
+            jPanelDiagramaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 204, Short.MAX_VALUE)
+        );
+
+        jScrollPaneGrafica.setViewportView(jPanelDiagrama);
 
         javax.swing.GroupLayout jPanelGraficaLayout = new javax.swing.GroupLayout(jPanelGrafica);
         jPanelGrafica.setLayout(jPanelGraficaLayout);
         jPanelGraficaLayout.setHorizontalGroup(
             jPanelGraficaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 413, Short.MAX_VALUE)
+            .addGroup(jPanelGraficaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPaneGrafica)
+                .addContainerGap())
         );
         jPanelGraficaLayout.setVerticalGroup(
             jPanelGraficaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 262, Short.MAX_VALUE)
+            .addGroup(jPanelGraficaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPaneGrafica)
+                .addContainerGap())
         );
 
         jPanelStadisticas.setBackground(new java.awt.Color(255, 255, 0));
+        jPanelStadisticas.setBorder(javax.swing.BorderFactory.createTitledBorder("Estadisticas"));
 
         javax.swing.GroupLayout jPanelStadisticasLayout = new javax.swing.GroupLayout(jPanelStadisticas);
         jPanelStadisticas.setLayout(jPanelStadisticasLayout);
@@ -72,20 +164,30 @@ public class PlanificadorGUI extends javax.swing.JFrame {
         );
         jPanelStadisticasLayout.setVerticalGroup(
             jPanelStadisticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 147, Short.MAX_VALUE)
+            .addGap(0, 135, Short.MAX_VALUE)
         );
 
         jPanelLog.setBackground(new java.awt.Color(204, 0, 153));
+        jPanelLog.setBorder(javax.swing.BorderFactory.createTitledBorder("Log"));
+
+        jTextAreaLog.setColumns(20);
+        jTextAreaLog.setRows(5);
+        jScrollPaneLog.setViewportView(jTextAreaLog);
 
         javax.swing.GroupLayout jPanelLogLayout = new javax.swing.GroupLayout(jPanelLog);
         jPanelLog.setLayout(jPanelLogLayout);
         jPanelLogLayout.setHorizontalGroup(
             jPanelLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 201, Short.MAX_VALUE)
+            .addGroup(jPanelLogLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPaneLog, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanelLogLayout.setVerticalGroup(
             jPanelLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanelLogLayout.createSequentialGroup()
+                .addComponent(jScrollPaneLog)
+                .addContainerGap())
         );
 
         jMenu1.setText("File");
@@ -102,13 +204,13 @@ public class PlanificadorGUI extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanelStadisticas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanelControles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanelGrafica, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGap(10, 10, 10)
+                        .addComponent(jPanelGrafica, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanelStadisticas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanelLog, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -133,44 +235,26 @@ public class PlanificadorGUI extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(PlanificadorGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(PlanificadorGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(PlanificadorGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(PlanificadorGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new PlanificadorGUI().setVisible(true);
-            }
-        });
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public javax.swing.ButtonGroup buttonGroupPoliticas;
+    private javax.swing.JButton jButtonIniciar;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     public javax.swing.JMenuBar jMenuBar1;
     public javax.swing.JPanel jPanelControles;
+    private javax.swing.JPanel jPanelDiagrama;
     public javax.swing.JPanel jPanelGrafica;
     public javax.swing.JPanel jPanelLog;
     public javax.swing.JPanel jPanelStadisticas;
+    public javax.swing.JRadioButton jRadioButtonPrioridades;
+    public javax.swing.JRadioButton jRadioButtonRRSP;
+    public javax.swing.JRadioButton jRadioButtonSJF;
+    public javax.swing.JRadioButton jRadioButtonSRT;
+    public javax.swing.JScrollPane jScrollPaneGrafica;
+    private javax.swing.JScrollPane jScrollPaneLog;
+    private javax.swing.JTextArea jTextAreaLog;
+    private javax.swing.JTextField jTextFieldQuantum;
     // End of variables declaration//GEN-END:variables
 }

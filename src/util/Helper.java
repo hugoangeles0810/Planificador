@@ -4,9 +4,11 @@
  */
 package util;
 
+import java.awt.Point;
 import java.util.Iterator;
 import java.util.List;
 import model.PCB;
+import model.Parametros;
 
 /**
  *
@@ -29,7 +31,7 @@ public class Helper {
         }
         collection.add(obj);
     }
-    
+
     public static void insertarOrdenadoPorUsoCPU(List<PCB> collection, PCB obj) {
         Iterator it = collection.iterator();
         int i = 0;
@@ -45,18 +47,18 @@ public class Helper {
         }
         collection.add(obj);
     }
-    
-    public static void incrementaEsperaListo(List<PCB> collection){
+
+    public static void incrementaEsperaListo(List<PCB> collection) {
         for (Iterator<PCB> it = collection.iterator(); it.hasNext();) {
             PCB pcb = it.next();
-            pcb.setTiempoEsperaListo(pcb.getTiempoEsperaListo()+1);
+            pcb.setTiempoEsperaListo(pcb.getTiempoEsperaListo() + 1);
         }
     }
-    
-    public static void incrementaEsperaBloqueado(List<PCB> collection){
+
+    public static void incrementaEsperaBloqueado(List<PCB> collection) {
         for (Iterator<PCB> it = collection.iterator(); it.hasNext();) {
             PCB pcb = it.next();
-            pcb.setTiempoEsperaBloqueado(pcb.getTiempoEsperaBloqueado()+1);
+            pcb.setTiempoEsperaBloqueado(pcb.getTiempoEsperaBloqueado() + 1);
         }
     }
 }

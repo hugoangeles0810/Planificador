@@ -4,6 +4,9 @@
  */
 package gui;
 
+import java.awt.Dimension;
+import javax.swing.JFrame;
+
 /**
  *
  * @author Hugo
@@ -15,8 +18,12 @@ public class PlanificadorGUI extends javax.swing.JFrame {
      */
     public PlanificadorGUI() {
         initComponents();
+        this.setVisible(true);
+        diagrama = new DiagramaGantt();
+        jScrollPaneGrafica.setViewportView(diagrama);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -38,7 +45,6 @@ public class PlanificadorGUI extends javax.swing.JFrame {
         jButtonIniciar = new javax.swing.JButton();
         jPanelGrafica = new javax.swing.JPanel();
         jScrollPaneGrafica = new javax.swing.JScrollPane();
-        jPanelDiagrama = new javax.swing.JPanel();
         jPanelStadisticas = new javax.swing.JPanel();
         jPanelLog = new javax.swing.JPanel();
         jScrollPaneLog = new javax.swing.JScrollPane();
@@ -115,7 +121,7 @@ public class PlanificadorGUI extends javax.swing.JFrame {
                 .addGroup(jPanelControlesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jTextFieldQuantum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                 .addComponent(jButtonIniciar)
                 .addContainerGap())
         );
@@ -123,18 +129,7 @@ public class PlanificadorGUI extends javax.swing.JFrame {
         jPanelGrafica.setBackground(new java.awt.Color(255, 102, 102));
         jPanelGrafica.setBorder(javax.swing.BorderFactory.createTitledBorder("Gráfica"));
 
-        javax.swing.GroupLayout jPanelDiagramaLayout = new javax.swing.GroupLayout(jPanelDiagrama);
-        jPanelDiagrama.setLayout(jPanelDiagramaLayout);
-        jPanelDiagramaLayout.setHorizontalGroup(
-            jPanelDiagramaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 369, Short.MAX_VALUE)
-        );
-        jPanelDiagramaLayout.setVerticalGroup(
-            jPanelDiagramaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 204, Short.MAX_VALUE)
-        );
-
-        jScrollPaneGrafica.setViewportView(jPanelDiagrama);
+        jScrollPaneGrafica.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 
         javax.swing.GroupLayout jPanelGraficaLayout = new javax.swing.GroupLayout(jPanelGrafica);
         jPanelGrafica.setLayout(jPanelGraficaLayout);
@@ -142,7 +137,7 @@ public class PlanificadorGUI extends javax.swing.JFrame {
             jPanelGraficaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelGraficaLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPaneGrafica)
+                .addComponent(jScrollPaneGrafica, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanelGraficaLayout.setVerticalGroup(
@@ -244,7 +239,6 @@ public class PlanificadorGUI extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     public javax.swing.JMenuBar jMenuBar1;
     public javax.swing.JPanel jPanelControles;
-    private javax.swing.JPanel jPanelDiagrama;
     public javax.swing.JPanel jPanelGrafica;
     public javax.swing.JPanel jPanelLog;
     public javax.swing.JPanel jPanelStadisticas;
@@ -253,8 +247,29 @@ public class PlanificadorGUI extends javax.swing.JFrame {
     public javax.swing.JRadioButton jRadioButtonSJF;
     public javax.swing.JRadioButton jRadioButtonSRT;
     public javax.swing.JScrollPane jScrollPaneGrafica;
-    private javax.swing.JScrollPane jScrollPaneLog;
-    private javax.swing.JTextArea jTextAreaLog;
+    public javax.swing.JScrollPane jScrollPaneLog;
+    public javax.swing.JTextArea jTextAreaLog;
     private javax.swing.JTextField jTextFieldQuantum;
     // End of variables declaration//GEN-END:variables
+    public static DiagramaGantt diagrama;
+    
+    
+    public static void main(String[] args) throws InterruptedException {
+        PlanificadorGUI v = new PlanificadorGUI();
+        for (int i = 0; i < 20; i++) {
+            System.out.println("entro");
+            diagrama.setTiempo(i);
+            diagrama.repaint();
+            Thread.sleep(100);
+        }
+        Thread.sleep(1000);
+        
+        for (int i = 20; i < 40; i++) {
+            System.out.println("entro");
+            diagrama.setTiempo(i);
+            diagrama.repaint();
+            Thread.sleep(100);
+        }
+    }
+
 }

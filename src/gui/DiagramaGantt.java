@@ -44,7 +44,7 @@ public class DiagramaGantt extends JPanel {
         for (int i = pos_x; i < this.size().width; i = i + UNIDAD_TIEMPO) {
             g.drawLine(i, this.size().height - PADDIND_EJE_Y * 2 - 5, i, this.size().height - PADDIND_EJE_Y * 2 + 5);
             g.drawString(j + "", i - 5, this.size().height - PADDIND_EJE_Y * 2 + 20);
-            j++;
+            j++; 
         }
 
         System.out.println("h: " + this.size().height);

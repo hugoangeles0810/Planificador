@@ -248,6 +248,12 @@ public class PCB implements Comparable<PCB>{
         return a.compareTo(b);
     }
     
+    public int compareToHoraLlegada(PCB o){
+        Long a = this.horaLlegada;
+        Long b = o.horaLlegada;
+        return a.compareTo(b);
+    }
+    
     public void setProceso(Proceso proceso){
         NEXT_PID++;
         this.PID = NEXT_PID;

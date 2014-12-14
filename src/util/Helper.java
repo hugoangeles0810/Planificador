@@ -47,6 +47,22 @@ public class Helper {
         }
         collection.add(obj);
     }
+    
+    public static void insertarOrdenadoPorHoraLLegada(List<PCB> collection, PCB obj) {
+        Iterator it = collection.iterator();
+        int i = 0;
+        if (!collection.isEmpty()) {
+            while (it.hasNext()) {
+                PCB element = (PCB) it.next();
+                if (obj.compareToHoraLlegada(element) < 0) {
+                    collection.add(i, obj);
+                    return;
+                }
+                i++;
+            }
+        }
+        collection.add(obj);
+    }
 
     public static void incrementaEsperaListo(List<PCB> collection) {
         for (Iterator<PCB> it = collection.iterator(); it.hasNext();) {

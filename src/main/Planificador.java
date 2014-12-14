@@ -2,8 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package model;
+package main;
 
+import gui.PlanificadorGUI;
+import java.awt.Graphics2D;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,6 +15,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import model.EstadoPCB;
+import model.Evento;
+import model.PCB;
+import model.Parametros;
+import model.PoliticaPlanificacion;
+import model.Proceso;
+import model.TipoEvento;
+import model.TipoProceso;
 import util.Helper;
 
 /**
@@ -21,21 +31,25 @@ import util.Helper;
  */
 public class Planificador {
 
-    private long hora;
-    private Proceso procesoFlag;
-    private long tiempoOcio;
-    private long tiempoEYS;
-    private List<PCB> ejecucion;
-    private List<PCB> enEYS;
-    private List<PCB> listos;
-    private List<PCB> bloqueados;
-    private List<PCB> libres;
-    private List<PCB> finalizados;
-    private PoliticaPlanificacion politica;
-    private BufferedReader lectorProcesos;
-    private File archivoCarga;
+    public long hora;
+    public Proceso procesoFlag;
+    public long tiempoOcio;
+    public long tiempoEYS;
+    public List<PCB> ejecucion;
+    public List<PCB> enEYS;
+    public List<PCB> listos;
+    public List<PCB> bloqueados;
+    public List<PCB> libres;
+    public List<PCB> finalizados;
+    public PoliticaPlanificacion politica;
+    public BufferedReader lectorProcesos;
+    public File archivoCarga;
+    
+    PlanificadorGUI view;
 
-    public Planificador(PoliticaPlanificacion politica) {
+    public Planificador(PlanificadorGUI view) {
+        this.view = view;
+        view.planf = this;
         this.ejecucion = new ArrayList();
         this.enEYS = new ArrayList();
         this.listos = new ArrayList();
@@ -49,19 +63,24 @@ public class Planificador {
         this.procesoFlag = null;
 
         archivoCarga = new File(Parametros.NOMBRE_ARCHIVO_CARGA);
+        iniciarLectura();
+
+    }
+
+    private void iniciarLectura() {
         try {
             lectorProcesos = new BufferedReader(new FileReader(archivoCarga));
         } catch (FileNotFoundException ex) {
             System.out.println("No se encontro el archivo de carga");
             System.exit(0);
         }
-
     }
 
     public void planificar() {
         boolean salir;
         Evento evento;
         procesoFlag = leerProceso();
+        System.out.println("NULL: " + procesoFlag );
         salir = false;
 
         System.out.println("--------------Inicio Simulacion---------------");
@@ -128,10 +147,12 @@ public class Planificador {
         }
 
     }
+    
+    
 
     public Evento siguienteEvento() {
         Evento evento;
-        ProcStat();
+//        ProcStat();
         while (true) {
             // Entrada de proceso
             if (procesoFlag != null && hora >= procesoFlag.getHoraLlegada()) {
@@ -192,8 +213,12 @@ public class Planificador {
                 evento.setReloj(hora);
                 return evento;
             }
-
+            
             hora++;
+            view.diagrama.actual = obtenerEstados();
+            view.diagrama.tiempo = hora;
+            view.diagrama.dibujarEstadosPorTiempo((Graphics2D) view.diagrama.getGraphics());
+            view.diagrama.repaint();
             if (!ejecucion.isEmpty()) {
                 PCB procesoEjecucion = ejecucion.get(0);
                 procesoEjecucion.setConsumidoUsoCPU(procesoEjecucion.getConsumidoUsoCPU() + 1);
@@ -236,6 +261,61 @@ public class Planificador {
         }
         return p;
     }
+    
+    public EstadoPCB[] obtenerEstados(){
+        ArrayList<PCB> pcbs;
+        pcbs = new ArrayList();
+        
+        for (PCB pcb : listos) {
+            Helper.insertarOrdenadoPorHoraLLegada(pcbs, pcb);
+        }
+        
+        for (PCB pcb : bloqueados) {
+            Helper.insertarOrdenadoPorHoraLLegada(pcbs, pcb);
+        }
+        
+        for (PCB pcb : ejecucion) {
+            Helper.insertarOrdenadoPorHoraLLegada(pcbs, pcb);
+        }
+        
+        for (PCB pcb : enEYS) {
+            Helper.insertarOrdenadoPorHoraLLegada(pcbs, pcb);
+        }
+        
+        return extraerEstados(pcbs);
+    }
+    
+    private EstadoPCB[] extraerEstados(ArrayList<PCB> pcbs){
+        EstadoPCB[] estados = new EstadoPCB[Parametros.MAX_PCB];
+        
+        for (int i = 0; i < pcbs.size(); i++) {
+            estados[i] = pcbs.get(i).getEstado();
+        }
+        
+        for (int i = pcbs.size(); i < Parametros.MAX_PCB; i++) {
+            estados[i] = null;
+        }
+        
+        return estados;
+    }
+    
+    public void clearData(){
+        PCB.NEXT_PID = 0;
+        listos.clear();
+        bloqueados.clear();
+        ejecucion.clear();
+        enEYS.clear();
+        finalizados.clear();
+        hora = 0;
+        tiempoEYS = 0;
+        tiempoOcio = 0;
+        try {
+            lectorProcesos.close();
+        } catch (IOException ex) {
+            lectorProcesos = null;
+        }
+        iniciarLectura();
+    }
 
     public static void main(String[] args) {
 //        Proceso p1 = new Proceso(0, 10, 5, TipoProceso.TR);
@@ -266,7 +346,7 @@ public class Planificador {
 //        
 //        Helper.insertarOrdenadoPorUsoCPU(pcbs, pcb5);
 //        Helper.insertarOrdenadoPorUsoCPU(pcbs, pcb6);
-//        Helper.insertarOrdenadoPorUsoCPU(pcbs, pcb7);
+////        Helper.insertarOrdenadoPorUsoCPU(pcbs, pcb7);
 //        Helper.insertarOrdenadoPorUsoCPU(pcbs, pcb8);
 //        
 //        mostrar_elementos(pcbs);
@@ -274,8 +354,8 @@ public class Planificador {
 //        System.out.println("TR TR " + TipoProceso.TR.compareTo(TipoProceso.TR));
 //        System.out.println("TR SYS " + TipoProceso.SYS.compareTo(TipoProceso.TR));
 //        
-        Parametros.QUANTUM = Integer.MAX_VALUE;
-        new Planificador(new SJF()).planificar();
+//        Parametros.QUANTUM = Integer.MAX_VALUE;
+        Planificador p = new Planificador(new PlanificadorGUI());
 
 //        ArrayList<PCB> pcbs = new ArrayList(Parametros.MAX_PCB);
 //        System.out.println(pcbs.get(0));

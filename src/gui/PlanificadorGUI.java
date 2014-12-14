@@ -4,8 +4,13 @@
  */
 package gui;
 
-import java.awt.Dimension;
 import javax.swing.JFrame;
+import main.Planificador;
+import model.Parametros;
+import model.RoundRobinCP;
+import model.RoundRobinSP;
+import model.SJF;
+import model.SRT;
 
 /**
  *
@@ -18,8 +23,10 @@ public class PlanificadorGUI extends javax.swing.JFrame {
      */
     public PlanificadorGUI() {
         initComponents();
+        jTextFieldQuantum.setText(Parametros.QUANTUM + "");
+        jTextFieldQuantum.setEditable(false);
         this.setVisible(true);
-        diagrama = new DiagramaGantt();
+        diagrama = new Dibujo();
         jScrollPaneGrafica.setViewportView(diagrama);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
@@ -62,19 +69,44 @@ public class PlanificadorGUI extends javax.swing.JFrame {
 
         buttonGroupPoliticas.add(jRadioButtonRRSP);
         jRadioButtonRRSP.setText("Round Robin");
+        jRadioButtonRRSP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonRRSPActionPerformed(evt);
+            }
+        });
 
         buttonGroupPoliticas.add(jRadioButtonPrioridades);
         jRadioButtonPrioridades.setText("Prioridades");
+        jRadioButtonPrioridades.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonPrioridadesActionPerformed(evt);
+            }
+        });
 
         buttonGroupPoliticas.add(jRadioButtonSJF);
         jRadioButtonSJF.setText("SJF");
+        jRadioButtonSJF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonSJFActionPerformed(evt);
+            }
+        });
 
         buttonGroupPoliticas.add(jRadioButtonSRT);
         jRadioButtonSRT.setText("SRT");
+        jRadioButtonSRT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonSRTActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Quantum");
 
         jButtonIniciar.setText("Iniciar");
+        jButtonIniciar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonIniciarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelControlesLayout = new javax.swing.GroupLayout(jPanelControles);
         jPanelControles.setLayout(jPanelControlesLayout);
@@ -227,6 +259,28 @@ public class PlanificadorGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jRadioButtonRRSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonRRSPActionPerformed
+        planf.politica = new RoundRobinSP();
+        System.out.println("aaaaa");
+    }//GEN-LAST:event_jRadioButtonRRSPActionPerformed
+
+    private void jRadioButtonPrioridadesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonPrioridadesActionPerformed
+        planf.politica = new RoundRobinCP();
+    }//GEN-LAST:event_jRadioButtonPrioridadesActionPerformed
+
+    private void jRadioButtonSJFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonSJFActionPerformed
+        planf.politica =  new SJF();
+    }//GEN-LAST:event_jRadioButtonSJFActionPerformed
+
+    private void jRadioButtonSRTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonSRTActionPerformed
+        planf.politica =  new SRT();
+    }//GEN-LAST:event_jRadioButtonSRTActionPerformed
+
+    private void jButtonIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIniciarActionPerformed
+        planf.planificar();
+        planf.clearData();
+    }//GEN-LAST:event_jButtonIniciarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -251,25 +305,26 @@ public class PlanificadorGUI extends javax.swing.JFrame {
     public javax.swing.JTextArea jTextAreaLog;
     private javax.swing.JTextField jTextFieldQuantum;
     // End of variables declaration//GEN-END:variables
-    public static DiagramaGantt diagrama;
+    public  Dibujo diagrama;
+    public Planificador planf;
     
     
     public static void main(String[] args) throws InterruptedException {
-        PlanificadorGUI v = new PlanificadorGUI();
-        for (int i = 0; i < 20; i++) {
-            System.out.println("entro");
-            diagrama.setTiempo(i);
-            diagrama.repaint();
-            Thread.sleep(100);
-        }
-        Thread.sleep(1000);
-        
-        for (int i = 20; i < 40; i++) {
-            System.out.println("entro");
-            diagrama.setTiempo(i);
-            diagrama.repaint();
-            Thread.sleep(100);
-        }
+//        PlanificadorGUI v = new PlanificadorGUI();
+//        for (int i = 0; i < 20; i++) {
+//            System.out.println("entro");
+//            diagrama.setTiempo(i);
+//            diagrama.repaint();
+//            Thread.sleep(100);
+//        }
+//        Thread.sleep(1000);
+//        
+//        for (int i = 20; i < 40; i++) {
+//            System.out.println("entro");
+//            diagrama.setTiempo(i);
+//            diagrama.repaint();
+//            Thread.sleep(100);
+//        }
     }
 
 }

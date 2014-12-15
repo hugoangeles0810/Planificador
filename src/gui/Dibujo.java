@@ -7,16 +7,20 @@ package gui;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import model.EstadoPCB;
+import model.PCB;
 import model.Parametros;
 
 /**
@@ -28,25 +32,29 @@ public class Dibujo extends JComponent {
     public static final int PADDIND_EJE_X = 40;
     public static final int PADDIND_EJE_Y = 20;
     public static final int UNIDAD_TIEMPO = 30;
-    public static final int DIST_PROCESOS = 35;
+    public static int DIST_PROCESOS = 33;
 
     Color colorBloq = Color.RED;
     Color colorList = Color.GREEN;
     Color colorEjec = Color.BLUE;
+    Color colorEYS = Color.YELLOW;
     Point puntoOrigenFlag = new Point(PADDIND_EJE_X, this.getHeight() - PADDIND_EJE_Y + 20);
 
     public ArrayList<Color> colors;
     public ArrayList<Shape> shapes;
-    public EstadoPCB[] actual, anterior;
-    Point[] ptsFlag;
+    public ArrayList<Shape> entradas;
+    public ArrayList<Shape> etiquetas;
+
+    public ArrayList<PCB> pcbs;
     public long tiempo;
+    public boolean pintar = true;
+
     public Dibujo() {
-        this.actual = new EstadoPCB[Parametros.MAX_PCB];
-        this.anterior = new EstadoPCB[Parametros.MAX_PCB];
-        ptsFlag = iniciarPtsFlags();
         shapes = new ArrayList();
         colors = new ArrayList();
+        entradas = new ArrayList();
         this.tiempo = 0;
+        setPreferredSize(new Dimension(300 * UNIDAD_TIEMPO + 2 * PADDIND_EJE_X, DIST_PROCESOS * Parametros.MAX_PCB + 3 * PADDIND_EJE_Y));
     }
 
     public long getTiempo() {
@@ -57,15 +65,27 @@ public class Dibujo extends JComponent {
         this.tiempo = tiempo;
     }
 
+    public ArrayList<PCB> getPcbs() {
+        return pcbs;
+    }
+
+    public void setPcbs(ArrayList<PCB> pcbs) {
+        this.pcbs = pcbs;
+    }
+
     @Override
     public void paint(Graphics g) {
         super.paint(g);
         Graphics2D g2 = (Graphics2D) g;
+        g2.setColor(Color.WHITE);
+        g2.drawRect(0, 0, this.getWidth(), this.getHeight());
+        g2.setColor(Color.BLACK);
         dibujarEjeX(g2);
         dibujarEjeY(g2);
-        Stroke stroke = new BasicStroke(2.0f);
+        Stroke stroke = new BasicStroke(3.0f);
         g2.setStroke(stroke);
         System.out.println("Size: " + shapes.size());
+        System.out.println("Size: " + colors.size());
         for (int i = 0; i < shapes.size(); i++) {
             Color color = colors.get(i);
             Shape shape = shapes.get(i);
@@ -73,130 +93,101 @@ public class Dibujo extends JComponent {
             g2.draw(shape);
         }
 
+        g2.setColor(Color.MAGENTA);
+        for (Shape s : entradas) {
+            g2.fill(s);
+        }
+        
+        g2.setColor(Color.BLACK);
+        for (Shape s : etiquetas) {
+            g2.fill(s);
+        }
+
     }
 
     private void dibujarEjeY(Graphics2D g2) {
-        Stroke stroke = new BasicStroke(2.0f);
-        g2.setStroke(stroke);
-        g2.drawLine(PADDIND_EJE_X, PADDIND_EJE_Y, PADDIND_EJE_X, this.getHeight() - PADDIND_EJE_Y);
-        int acu = this.getHeight() - PADDIND_EJE_Y * 2;
-        for (int i = 0; i < 10; i++) {
-            acu -= DIST_PROCESOS;
-            g2.drawLine(PADDIND_EJE_X - 5, acu, PADDIND_EJE_X + 5, acu);
+        if (tiempo > 0) {
+            g2.setStroke(new BasicStroke(2.0f));
+            g2.drawLine(PADDIND_EJE_X, PADDIND_EJE_Y, PADDIND_EJE_X, this.getHeight() - PADDIND_EJE_Y);
+            int acu = this.getHeight() - PADDIND_EJE_Y * 2;
+            for (int i = 0; i < 10; i++) {
+                acu -= DIST_PROCESOS;
+                g2.setStroke(new BasicStroke(0.1f));
+                g2.drawLine(PADDIND_EJE_X, acu, (int) (tiempo) * UNIDAD_TIEMPO + PADDIND_EJE_X, acu);
+                g2.setStroke(new BasicStroke(2.0f));
+                g2.drawLine(PADDIND_EJE_X - 5, acu, PADDIND_EJE_X + 5, acu);
+            }
         }
+
     }
 
     private void dibujarEjeX(Graphics2D g2) {
 
-        Stroke stroke = new BasicStroke(2.0f);
-        g2.setStroke(stroke);
-        puntoOrigenFlag.y = this.getHeight() - PADDIND_EJE_Y * 2;
-        System.out.println("Punto 1: " + puntoOrigenFlag.x + "," + puntoOrigenFlag.y + " Punto 2: " + (int) tiempo * UNIDAD_TIEMPO + PADDIND_EJE_X + ", " + puntoOrigenFlag.y);
-        g2.drawLine(puntoOrigenFlag.x, puntoOrigenFlag.y, (int) (tiempo) * UNIDAD_TIEMPO + PADDIND_EJE_X, puntoOrigenFlag.y);
-        System.out.println("w: " + this.getWidth());
-        int j = 0;
-        for (int i = puntoOrigenFlag.x; i <= (int) (tiempo) * UNIDAD_TIEMPO + PADDIND_EJE_X; i = i + UNIDAD_TIEMPO) {
-            System.out.println("aca esta");
-            g2.drawLine(i, this.getHeight() - PADDIND_EJE_Y * 2 - 5, i, this.getHeight() - PADDIND_EJE_Y * 2 + 5);
-            g2.drawString(j + "", i - 5, this.getHeight() - PADDIND_EJE_Y * 2 + 20);
-            j++;
-        }
-    }
-
-    public void dibujarEstadosPorTiempo(Graphics2D g2) {
-        Stroke stroke = new BasicStroke(2.0f);
-        g2.setStroke(stroke);
-        int acu = puntoOrigenFlag.y;
-        for (int i = 0; i < actual.length; i++) {
-            acu -= DIST_PROCESOS;
-            if (actual[i] != null) {
-                Color c = getColorEstados(actual[i]);
-                Line2D.Float line = new Line2D.Float((tiempo-1)*UNIDAD_TIEMPO+PADDIND_EJE_X, acu, (tiempo)*UNIDAD_TIEMPO+PADDIND_EJE_X, acu);
-                colors.add(c);
-                shapes.add(line);
-                g2.setColor(c);
-                g2.draw(line);
+        if (tiempo > 0) {
+            Stroke stroke = new BasicStroke(2.0f);
+            g2.setStroke(stroke);
+            puntoOrigenFlag.y = this.getHeight() - PADDIND_EJE_Y * 2;
+            g2.drawLine(puntoOrigenFlag.x, puntoOrigenFlag.y, (int) (tiempo) * UNIDAD_TIEMPO + PADDIND_EJE_X, puntoOrigenFlag.y);
+            System.out.println("w: " + this.getWidth());
+            int j = 0;
+            for (int i = puntoOrigenFlag.x; i <= (int) (tiempo) * UNIDAD_TIEMPO + PADDIND_EJE_X; i = i + UNIDAD_TIEMPO) {
+                g2.setStroke(new BasicStroke(0.1f));
+                g2.drawLine(i, PADDIND_EJE_Y, i, this.getHeight() - 2 * PADDIND_EJE_Y);
+                g2.setStroke(new BasicStroke(2.0f));
+                g2.drawLine(i, this.getHeight() - PADDIND_EJE_Y * 2 - 5, i, this.getHeight() - PADDIND_EJE_Y * 2 + 5);
+                g2.drawString(j + "", i - 5, this.getHeight() - PADDIND_EJE_Y * 2 + 20);
+                j++;
             }
-//            if (actual[i] != null) {
-//                if (anterior[i] != null) {
-//                    if (actual[i].equals(anterior[i])) {
-//                        Color c = getColorEstados(actual[i]);
-//                        
-//                        System.out.println(actual[i]);
-//                        g2.setColor(c);
-//                        Line2D.Float line = new Line2D.Float(ptsFlag[i], new Point((int) tiempo * UNIDAD_TIEMPO + PADDIND_EJE_X, ptsFlag[i].y));
-//                        shapes.add(line);
-//                        colors.add(c);
-//                        g2.draw(line);
-//                    }
-//                } else {
-//                    ptsFlag[i].x = (int) tiempo * UNIDAD_TIEMPO + PADDIND_EJE_X;
-//                    ptsFlag[i].y = acu;
-//                    anterior = actual;
-//                }
-//            } else {
-//                if (anterior[i] != null) {
-//                    Color c = getColorEstados(anterior[i]);
-//                    g2.setColor(c);
-//                    Line2D.Float line = new Line2D.Float(ptsFlag[i], new Point((int) tiempo * UNIDAD_TIEMPO + PADDIND_EJE_X, ptsFlag[i].y));
-//                    shapes.add(line);
-//                    colors.add(c);
-//                    g2.draw(line);
-//                }
-//        }
-//
-//        acu -= DIST_PROCESOS;
-//    }
         }
     }
 
-    public Color getColorEstados(EstadoPCB estado) {
+    public void dibujarEstados() {
+        Graphics2D g2 = (Graphics2D) getGraphics();
+        int pos_y = this.getHeight() - PADDIND_EJE_Y * 2;
+        for (PCB pcb : pcbs) {
+            if (pcb.getEstado() != EstadoPCB.LIBRE) {
+                System.out.println("Estado : " + pcb.getEstado());
+                Color color = getColorEstados(pcb.getEstado());
+                Line2D line = crearLinea((int) (tiempo - 1) * UNIDAD_TIEMPO + PADDIND_EJE_X, pos_y - (int) pcb.getNRO() * DIST_PROCESOS, (int) (tiempo) * UNIDAD_TIEMPO + PADDIND_EJE_X, pos_y - (int) pcb.getNRO() * DIST_PROCESOS);
+                colors.add(color);
+                shapes.add(line);
+            }
+        }
+    }
+
+    public void dibujaEntradaProceso(PCB pcb) {
+        Graphics2D g2 = (Graphics2D) getGraphics();
+        Font f = new Font("Arial", Font.PLAIN, 10);
+        int pos_y = this.getHeight() - PADDIND_EJE_Y * 2;
+        Rectangle2D rect = crearRect((int) (tiempo) * UNIDAD_TIEMPO + PADDIND_EJE_X - 10, pos_y - (int) pcb.getNRO() * DIST_PROCESOS - 10, 20, 20);
+        entradas.add(rect);
+        Shape etiqueta = f.createGlyphVector(g2.getFontRenderContext(), "P: " + pcb.getPID()).getOutline((int) (tiempo) * UNIDAD_TIEMPO + PADDIND_EJE_X, pos_y - (int) pcb.getNRO() * DIST_PROCESOS);
+        etiquetas.add(etiqueta);
+    }
+
+    public Color getColorEstados(int estado) {
 
         switch (estado) {
-            case LISTO:
+            case EstadoPCB.LISTO:
                 return colorList;
-            case BLOQUEADO:
+            case EstadoPCB.BLOQUEADO:
                 return colorBloq;
-            case EJECUCION:
+            case EstadoPCB.EJECUCION:
                 return colorEjec;
+            case EstadoPCB.EYS:
+                return colorEYS;
             default:
                 return null;
         }
 
     }
 
-    public Point[] iniciarPtsFlags() {
-        Point[] points;
-        points = new Point[Parametros.MAX_PCB];
+    private Line2D.Float crearLinea(int x1, int y1, int x2, int y2) {
+        return new Line2D.Float(x1, y1, x2, y2);
 
-        for (int i = 0; i < points.length; i++) {
-            points[i] = new Point(0, 0);
-
-        }
-
-        return points;
     }
 
-    public static void main(String[] args) throws InterruptedException {
-        JFrame v = new JFrame("Prueba");
-        Dibujo d = new Dibujo();
-        v.getContentPane().add(d);
-        v.setBounds(200, 200, 500, 500);
-        v.setVisible(true);
-        for (int i = 0; i < 20; i++) {
-            System.out.println("entro");
-            d.setTiempo(i);
-            d.repaint();
-            Thread.sleep(100);
-        }
-        Thread.sleep(1000);
-
-        for (int i = 20; i < 40; i++) {
-            System.out.println("entro");
-            d.setTiempo(i);
-            d.repaint();
-            Thread.sleep(100);
-        }
+    private Rectangle2D.Float crearRect(int x, int y, int w, int h) {
+        return new Rectangle2D.Float(x, y, w, h);
     }
-
 }

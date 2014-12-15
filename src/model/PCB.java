@@ -11,8 +11,11 @@ package model;
 public class PCB implements Comparable<PCB>{
 
     public static long NEXT_PID;
+    public static long NRO_PCB;
+    
     private long PID;
-    private EstadoPCB estado;
+    private long NRO;
+    private int estado;
     private TipoProceso tipoProceso;
     private int memoria;
     private int direccion;
@@ -32,9 +35,12 @@ public class PCB implements Comparable<PCB>{
 
     static {
         NEXT_PID = 0;
+        NRO_PCB = 0;
     }
 
     public PCB(){
+        NRO_PCB++;
+        NRO = NRO_PCB;
     }
 
     public PCB(Proceso proceso) {
@@ -48,7 +54,7 @@ public class PCB implements Comparable<PCB>{
         this.memoria = proceso.getTamañoMemoria();
     }
 
-    public PCB(EstadoPCB estado, long horaLlegada, long usoCPU, long usoContCPU) {
+    public PCB(int estado, long horaLlegada, long usoCPU, long usoContCPU) {
         this();
         this.estado = estado;
         this.horaLlegada = horaLlegada;
@@ -64,7 +70,7 @@ public class PCB implements Comparable<PCB>{
         this.usoContCPU = usoContCPU;
     }
 
-    public PCB(EstadoPCB estado, TipoProceso tipoProceso, int memoria, int direccion, long horaLlegada, long usoCPU, long usoContCPU) {
+    public PCB(int estado, TipoProceso tipoProceso, int memoria, int direccion, long horaLlegada, long usoCPU, long usoContCPU) {
         this();
         this.estado = estado;
         this.tipoProceso = tipoProceso;
@@ -83,11 +89,11 @@ public class PCB implements Comparable<PCB>{
         this.PID = PID;
     }
 
-    public EstadoPCB getEstado() {
+    public int getEstado() {
         return estado;
     }
 
-    public void setEstado(EstadoPCB estado) {
+    public void setEstado(int estado) {
         this.estado = estado;
     }
 
@@ -218,8 +224,15 @@ public class PCB implements Comparable<PCB>{
     public boolean requiereEYS(){
         return this.consumidoUsoContCPU + this.consParUsoContCPU >= this.usoContCPU;
     }
-    
 
+    public long getNRO() {
+        return NRO;
+    }
+
+    public void setNRO(long NRO) {
+        this.NRO = NRO;
+    }
+    
     @Override
     public String toString() {
         return "PID: " + this.PID
@@ -295,6 +308,8 @@ public class PCB implements Comparable<PCB>{
         pcb.horaSalida = this.horaSalida;
         pcb.memoria = this.memoria;
         pcb.tiempoEYS = this.tiempoEYS;
+        pcb.tiempoEsperaListo = this.tiempoEsperaListo;
+        pcb.tiempoEsperaBloqueado = this.tiempoEsperaBloqueado;
         pcb.tipoProceso = this.tipoProceso;
         pcb.usoCPU = this.usoCPU;
         pcb.usoContCPU = this.usoContCPU;

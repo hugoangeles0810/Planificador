@@ -4,11 +4,9 @@
  */
 package util;
 
-import java.awt.Point;
 import java.util.Iterator;
 import java.util.List;
 import model.PCB;
-import model.Parametros;
 
 /**
  *
@@ -76,5 +74,35 @@ public class Helper {
             PCB pcb = it.next();
             pcb.setTiempoEsperaBloqueado(pcb.getTiempoEsperaBloqueado() + 1);
         }
+    }
+    
+    public static double calculaSTDListo(List<PCB> pcbs, double mean, int n){
+        double acu = 0;
+        for (PCB pcb : pcbs) {
+            acu += Math.pow(mean-pcb.getTiempoEsperaListo(),2);
+        }
+        
+        return Math.sqrt(acu/n);
+        
+    }
+    
+    public static double calculaSTDBloqueado(List<PCB> pcbs, double mean, int n){
+        double acu = 0;
+        for (PCB pcb : pcbs) {
+            acu += Math.pow(mean-pcb.getTiempoEsperaBloqueado(),2);
+        }
+        
+        return Math.sqrt(acu/n);
+        
+    }
+    
+    public static double calculaSTDCPU(List<PCB> pcbs, double mean, int n){
+        double acu = 0;
+        for (PCB pcb : pcbs) {
+            acu += Math.pow(mean-pcb.getUsoCPU(),2);
+        }
+        
+        return Math.sqrt(acu/n);
+        
     }
 }

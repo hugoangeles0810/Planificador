@@ -15,7 +15,7 @@ public class SRT implements PoliticaPlanificacion {
 
     @Override
     public void entradaNuevoProceso(PCB pcb, long hora, List<PCB> listos, List<PCB> ejecucion) {
-        pcb.setEstado(EstadoPCB.LIBRE);
+        pcb.setEstado(EstadoPCB.LISTO);
 
         if (!ejecucion.isEmpty() && pcb.compareToUsoCPU(ejecucion.get(0)) < 0) {
             ejecucion.get(0).setConsumidoUsoContCPU(ejecucion.get(0).getConsumidoUsoContCPU() + ejecucion.get(0).getConsParUsoContCPU());

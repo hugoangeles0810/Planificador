@@ -50,6 +50,7 @@ public class RoundRobinSP implements PoliticaPlanificacion{
     @Override
     public void finEYS(PCB pcb, long hora, List<PCB> enEYS, List<PCB> listos, List<PCB> ejecucion) {
         pcb.setConsumidoEYS(0);
+        pcb.setEstado(EstadoPCB.LISTO);
         enEYS.remove(0);
         listos.add(pcb);
     }

@@ -19,7 +19,6 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 import model.EstadoPCB;
 import model.PCB;
 import model.Parametros;
@@ -200,6 +199,17 @@ public class Dibujo extends JComponent {
                 return null;
         }
 
+    }
+    
+    public void clearData(){
+        tiempo = 0;
+        entradas.clear();
+        shapes.clear();
+        finales.clear();
+        etiquetas.clear();
+        colors.clear();
+        pcbs.clear();
+        repaint();
     }
 
     private Line2D.Float crearLinea(int x1, int y1, int x2, int y2) {

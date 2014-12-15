@@ -33,8 +33,10 @@ public class PlanificadorGUI extends javax.swing.JFrame {
         jPanel1.add(diagrama);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.planf = null;
+        jRadioButtonRRSP.setSelected(true);
+        jTextFieldVelocidad.setText((1001-jSliderVelocidad.getValue()) + "");
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -54,6 +56,12 @@ public class PlanificadorGUI extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jTextFieldQuantum = new javax.swing.JTextField();
         jButtonIniciar = new javax.swing.JButton();
+        jSliderVelocidad = new javax.swing.JSlider();
+        jLabel24 = new javax.swing.JLabel();
+        jTextFieldVelocidad = new javax.swing.JTextField();
+        jButtonLimpiar = new javax.swing.JButton();
+        jButtonPausar = new javax.swing.JButton();
+        jButtonDetener = new javax.swing.JButton();
         jPanelGrafica = new javax.swing.JPanel();
         jScrollPaneGrafica = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
@@ -161,34 +169,90 @@ public class PlanificadorGUI extends javax.swing.JFrame {
             }
         });
 
+        jSliderVelocidad.setMaximum(1000);
+        jSliderVelocidad.setMinorTickSpacing(1);
+        jSliderVelocidad.setValue(1000);
+        jSliderVelocidad.setInverted(true);
+        jSliderVelocidad.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSliderVelocidadStateChanged(evt);
+            }
+        });
+
+        jLabel24.setText("Velocidad");
+
+        jTextFieldVelocidad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldVelocidadActionPerformed(evt);
+            }
+        });
+
+        jButtonLimpiar.setText("Limpiar");
+        jButtonLimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonLimpiarActionPerformed(evt);
+            }
+        });
+
+        jButtonPausar.setText("Pausar");
+        jButtonPausar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonPausarActionPerformed(evt);
+            }
+        });
+
+        jButtonDetener.setText("Detener");
+        jButtonDetener.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDetenerActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanelControlesLayout = new javax.swing.GroupLayout(jPanelControles);
         jPanelControles.setLayout(jPanelControlesLayout);
         jPanelControlesLayout.setHorizontalGroup(
             jPanelControlesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelControlesLayout.createSequentialGroup()
                 .addGroup(jPanelControlesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelControlesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanelControlesLayout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(jLabel1))
+                        .addGroup(jPanelControlesLayout.createSequentialGroup()
+                            .addGap(34, 34, 34)
+                            .addGroup(jPanelControlesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jRadioButtonPrioridades)
+                                .addComponent(jRadioButtonRRSP)
+                                .addComponent(jRadioButtonSJF)
+                                .addComponent(jRadioButtonSRT)))
+                        .addGroup(jPanelControlesLayout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(jLabel2)
+                            .addGap(18, 18, 18)
+                            .addComponent(jTextFieldQuantum))
+                        .addGroup(jPanelControlesLayout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(jLabel24)
+                            .addGap(18, 18, 18)
+                            .addComponent(jTextFieldVelocidad)))
+                    .addGroup(jPanelControlesLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanelControlesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanelControlesLayout.createSequentialGroup()
+                                .addComponent(jButtonIniciar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButtonPausar))
+                            .addGroup(jPanelControlesLayout.createSequentialGroup()
+                                .addComponent(jSliderVelocidad, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelControlesLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButtonIniciar))
-                    .addGroup(jPanelControlesLayout.createSequentialGroup()
-                        .addGroup(jPanelControlesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanelControlesLayout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel1))
-                            .addGroup(jPanelControlesLayout.createSequentialGroup()
-                                .addGap(34, 34, 34)
-                                .addGroup(jPanelControlesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jRadioButtonPrioridades)
-                                    .addComponent(jRadioButtonRRSP)
-                                    .addComponent(jRadioButtonSJF)
-                                    .addComponent(jRadioButtonSRT)))
-                            .addGroup(jPanelControlesLayout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel2)
-                                .addGap(18, 18, 18)
-                                .addComponent(jTextFieldQuantum)))
-                        .addGap(0, 18, Short.MAX_VALUE)))
+                        .addComponent(jButtonLimpiar)))
                 .addContainerGap())
+            .addGroup(jPanelControlesLayout.createSequentialGroup()
+                .addGap(37, 37, 37)
+                .addComponent(jButtonDetener)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanelControlesLayout.setVerticalGroup(
             jPanelControlesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -206,9 +270,21 @@ public class PlanificadorGUI extends javax.swing.JFrame {
                 .addGroup(jPanelControlesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jTextFieldQuantum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButtonIniciar)
-                .addContainerGap())
+                .addGap(18, 18, 18)
+                .addGroup(jPanelControlesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel24)
+                    .addComponent(jTextFieldVelocidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSliderVelocidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanelControlesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonIniciar)
+                    .addComponent(jButtonPausar))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonDetener)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
+                .addComponent(jButtonLimpiar)
+                .addGap(30, 30, 30))
         );
 
         jPanelGrafica.setBorder(javax.swing.BorderFactory.createTitledBorder("Gráfica"));
@@ -515,7 +591,7 @@ public class PlanificadorGUI extends javax.swing.JFrame {
                 .addComponent(jPanelBlocked, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanelExec, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(109, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanelLog.setBorder(javax.swing.BorderFactory.createTitledBorder("Log"));
@@ -762,24 +838,73 @@ public class PlanificadorGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jRadioButtonPrioridadesActionPerformed
 
     private void jRadioButtonSJFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonSJFActionPerformed
-        planf.politica =  new SJF();
+        planf.politica = new SJF();
     }//GEN-LAST:event_jRadioButtonSJFActionPerformed
 
     private void jRadioButtonSRTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonSRTActionPerformed
-        planf.politica =  new SRT();
+        planf.politica = new SRT();
     }//GEN-LAST:event_jRadioButtonSRTActionPerformed
 
     private void jButtonIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIniciarActionPerformed
-        hilo = new Hilo();
-        hilo.start();
+        setRadioButtons(false);
+        if (pause) {
+            if (hilo != null) {
+                hilo.resume();
+            }
+        } else {
+
+            hilo = new Hilo();
+            hilo.start();
+        }
+        pause = false;
+        jButtonIniciar.setEnabled(false);
+        jButtonPausar.setEnabled(true);
+        jButtonDetener.setEnabled(true);
     }//GEN-LAST:event_jButtonIniciarActionPerformed
 
+    private void jTextFieldVelocidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldVelocidadActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldVelocidadActionPerformed
+
+    private void jSliderVelocidadStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSliderVelocidadStateChanged
+        jTextFieldVelocidad.setText((1001-jSliderVelocidad.getValue()) + "");
+        planf.velocidad = jSliderVelocidad.getValue();
+    }//GEN-LAST:event_jSliderVelocidadStateChanged
+
+    private void jButtonLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLimpiarActionPerformed
+        limpiarEstadisticas();
+        planf.clearData();
+        diagrama.clearData();
+        jButtonIniciar.setEnabled(true);
+        setRadioButtons(true);
+    }//GEN-LAST:event_jButtonLimpiarActionPerformed
+
+    private void jButtonPausarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPausarActionPerformed
+        if (hilo != null && hilo.isAlive()) {
+            hilo.suspend();
+            pause = true;
+            jButtonIniciar.setEnabled(true);
+            jButtonPausar.setEnabled(false);
+        }
+    }//GEN-LAST:event_jButtonPausarActionPerformed
+
+    private void jButtonDetenerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDetenerActionPerformed
+        planf.salir = true;
+        hilo.stop();
+        jButtonDetener.setEnabled(false);
+        jButtonIniciar.setEnabled(false);
+        jButtonPausar.setEnabled(false);
+        jButtonLimpiar.setEnabled(true);
+    }//GEN-LAST:event_jButtonDetenerActionPerformed
     /**
      * @param args the command line arguments
      */
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.ButtonGroup buttonGroupPoliticas;
-    private javax.swing.JButton jButtonIniciar;
+    public javax.swing.JButton jButtonDetener;
+    public javax.swing.JButton jButtonIniciar;
+    private javax.swing.JButton jButtonLimpiar;
+    public javax.swing.JButton jButtonPausar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -796,6 +921,7 @@ public class PlanificadorGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -843,20 +969,47 @@ public class PlanificadorGUI extends javax.swing.JFrame {
     public javax.swing.JRadioButton jRadioButtonSRT;
     public javax.swing.JScrollPane jScrollPaneGrafica;
     public javax.swing.JScrollPane jScrollPaneLog;
+    public javax.swing.JSlider jSliderVelocidad;
     public javax.swing.JTextArea jTextAreaLog;
     private javax.swing.JTextField jTextFieldQuantum;
+    private javax.swing.JTextField jTextFieldVelocidad;
     // End of variables declaration//GEN-END:variables
-    public  Dibujo diagrama;
-    public  Planificador planf;
+    public Dibujo diagrama;
+    public Planificador planf;
     public Hilo hilo;
+    boolean pause = false;
+
+    private void limpiarEstadisticas() {
+        jLabelTime.setText("");
+        jLabelIdle.setText("");
+        jLabelBusy.setText("");
+        jLabelWaitMin.setText("");
+        jLabelWaitMax.setText("");
+        jLabelWaitMean.setText("");
+        jLabelWaitStd.setText("");
+        jLabelBlockedMin.setText("");
+        jLabelBlockedMax.setText("");
+        jLabelBlockedMean.setText("");
+        jLabelBlockedStd.setText("");
+        jLabelExecMin.setText("");
+        jLabelExecMax.setText("");
+        jLabelExecMean.setText("");
+        jLabelExecStd.setText("");
+        jTextAreaLog.setText("");
+    }
     
-    class Hilo extends Thread{
+    private void setRadioButtons(boolean b){
+        jRadioButtonRRSP.setEnabled(b);
+        jRadioButtonPrioridades.setEnabled(b);
+        jRadioButtonSJF.setEnabled(b);
+        jRadioButtonSRT.setEnabled(b);
+    }
+
+    class Hilo extends Thread {
 
         @Override
         public void run() {
             planf.planificar();
         }
-        
     }
-
 }

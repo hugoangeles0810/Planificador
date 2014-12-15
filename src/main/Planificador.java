@@ -19,6 +19,7 @@ import model.PCB;
 import model.Parametros;
 import model.PoliticaPlanificacion;
 import model.Proceso;
+import model.RoundRobinSP;
 import model.TipoEvento;
 import model.TipoProceso;
 import util.Helper;
@@ -42,16 +43,19 @@ public class Planificador {
     public PoliticaPlanificacion politica;
     public BufferedReader lectorProcesos;
     public File archivoCarga;
+    public int velocidad;
     double minWait, maxWait, meanWait, stdWait, acuWait;
     double minBlock, maxBlock, meanBlock, stdBlock, acuBlock;
     double minExec, maxExec, meanExec, stdExec, acuExec;
     int cont;
+    public boolean salir;
 
     PlanificadorGUI view;
 
     public Planificador(PlanificadorGUI view) {
         this.view = view;
         view.planf = this;
+        this.velocidad = view.jSliderVelocidad.getValue();
         this.ejecucion = new ArrayList();
         this.enEYS = new ArrayList();
         this.listos = new ArrayList();
@@ -62,6 +66,7 @@ public class Planificador {
         this.tiempoEYS = 0L;
         this.tiempoOcio = 0L;
         this.procesoFlag = null;
+        this.politica = new RoundRobinSP();
         minWait = maxWait = meanWait = stdWait = acuWait = 0;
         minBlock = maxBlock = meanBlock = stdBlock = acuBlock = 0;
         minExec = maxExec = meanExec = stdExec = acuExec = 0;
@@ -82,7 +87,6 @@ public class Planificador {
     }
 
     public void planificar() {
-        boolean salir;
         Evento evento;
         procesoFlag = leerProceso();
         System.out.println("NULL: " + procesoFlag);
@@ -92,64 +96,68 @@ public class Planificador {
         while (!salir) {
             evento = siguienteEvento();
 
-            switch (evento.getTipo()) {
-                case ENTRADA_NUEVO_PROCESO:
-                    PCB pcb;
-                    if (!libres.isEmpty()) {
-                        pcb = libres.get(0);
-                        libres.remove(0);
-                        pcb.setProceso(procesoFlag);
-                        politica.entradaNuevoProceso(pcb, hora, listos, ejecucion);
-                        view.diagrama.dibujaEntradaProceso(pcb);
-                        System.out.println("[T:" + hora + "]" + " Entrada nuevo Proceso ==> " + pcb);
-                        view.jTextAreaLog.setText(view.jTextAreaLog.getText() + "[T:" + hora + "]" + " Entrada nuevo Proceso ==> " + pcb + "\n");
-                        procesoFlag = leerProceso();
-                    } else {
-                        System.out.println("[T:" + hora + "]" + " Entrada nuevo Proceso ==> " + " RECHAZADO, no hay PCBs libres ");
-                        view.jTextAreaLog.setText(view.jTextAreaLog.getText() + "[T:" + hora + "]" + " Entrada nuevo Proceso ==> " + " RECHAZADO, no hay PCBs libres " + "\n");
-                    }
-
-                    break;
-                case FIN_QUANTUM:
-                    System.out.println("[T:" + hora + "]" + " Fin de Quantum ==> " + evento.getPcb());
-                    view.jTextAreaLog.setText(view.jTextAreaLog.getText() + "[T:" + hora + "]" + " Fin de Quantum ==> " + evento.getPcb() + "\n");
-
-                    politica.finQuantum(evento.getPcb(), hora, listos, ejecucion);
-                    break;
-                case FIN_PROCESO_ACTIVO:
-                    politica.finProcesoActivo(evento.getPcb(), ejecucion, hora);
-                    view.diagrama.dibujaFinalProceso(evento.getPcb());
-                    System.out.println("[T:" + hora + "]" + " Fin de Proceso ==> " + evento.getPcb());
-                    view.jTextAreaLog.setText(view.jTextAreaLog.getText() + "[T:" + hora + "]" + " Fin de Proceso ==> " + evento.getPcb() + "\n");
-                    finalizados.add(evento.getPcb().clone());
-                    procesaEstadisticas();
-                    evento.getPcb().resetData();
-                    libres.add(evento.getPcb());
-                    break;
-                case BLOQUEO_ES:
-                    politica.bloqueoPorEYS(evento.getPcb(), hora, ejecucion, bloqueados);
-                    System.out.println("[T:" + hora + "]" + " Bloqueo E/S ==> " + evento.getPcb());
-                    view.jTextAreaLog.setText(view.jTextAreaLog.getText() + "[T:" + hora + "]" + " Bloqueo E/S ==> " + evento.getPcb() + "\n");
-
-                    break;
-                case FIN_ES:
-                    PCB flag = evento.getPcb();
-                    flag.setTiempoTotalEYS(flag.getTiempoTotalEYS() + flag.getTiempoEYS());
-                    politica.finEYS(evento.getPcb(), hora, enEYS, listos, ejecucion);
-                    System.out.println("[T:" + hora + "]" + " Fin E/S ==> " + evento.getPcb());
-                    view.jTextAreaLog.setText(view.jTextAreaLog.getText() + "[T:" + hora + "]" + " Fin E/S ==> " + evento.getPcb() + "\n");
-
-                    break;
-                case FIN_SIMULACION:
-                    try {
-                        lectorProcesos.close();
-                    } catch (IOException ex) {
-                    }
-                    System.out.println("--------------Fin Simulacion---------------");
-                    view.jTextAreaLog.setText(view.jTextAreaLog.getText() + "--------------Fin Simulacion---------------" + "\n");
-                    this.view.diagrama.pintar = false;
-                    salir = true;
-                    break;
+            if (evento!=null) {
+                switch (evento.getTipo()) {
+                    case ENTRADA_NUEVO_PROCESO:
+                        PCB pcb;
+                        if (!libres.isEmpty()) {
+                            pcb = libres.get(0);
+                            libres.remove(0);
+                            pcb.setProceso(procesoFlag);
+                            politica.entradaNuevoProceso(pcb, hora, listos, ejecucion);
+                            view.diagrama.dibujaEntradaProceso(pcb);
+                            System.out.println("[T:" + hora + "]" + " Entrada nuevo Proceso ==> " + pcb);
+                            view.jTextAreaLog.setText(view.jTextAreaLog.getText() + "[T:" + hora + "]" + " Entrada nuevo Proceso ==> " + pcb + "\n");
+                            procesoFlag = leerProceso();
+                        } else {
+                            System.out.println("[T:" + hora + "]" + " Entrada nuevo Proceso ==> " + " RECHAZADO, no hay PCBs libres ");
+                            view.jTextAreaLog.setText(view.jTextAreaLog.getText() + "[T:" + hora + "]" + " Entrada nuevo Proceso ==> " + " RECHAZADO, no hay PCBs libres " + "\n");
+                        }
+                        
+                        break;
+                    case FIN_QUANTUM:
+                        System.out.println("[T:" + hora + "]" + " Fin de Quantum ==> " + evento.getPcb());
+                        view.jTextAreaLog.setText(view.jTextAreaLog.getText() + "[T:" + hora + "]" + " Fin de Quantum ==> " + evento.getPcb() + "\n");
+                        
+                        politica.finQuantum(evento.getPcb(), hora, listos, ejecucion);
+                        break;
+                    case FIN_PROCESO_ACTIVO:
+                        politica.finProcesoActivo(evento.getPcb(), ejecucion, hora);
+                        view.diagrama.dibujaFinalProceso(evento.getPcb());
+                        System.out.println("[T:" + hora + "]" + " Fin de Proceso ==> " + evento.getPcb());
+                        view.jTextAreaLog.setText(view.jTextAreaLog.getText() + "[T:" + hora + "]" + " Fin de Proceso ==> " + evento.getPcb() + "\n");
+                        finalizados.add(evento.getPcb().clone());
+                        procesaEstadisticas();
+                        evento.getPcb().resetData();
+                        libres.add(evento.getPcb());
+                        break;
+                    case BLOQUEO_ES:
+                        politica.bloqueoPorEYS(evento.getPcb(), hora, ejecucion, bloqueados);
+                        System.out.println("[T:" + hora + "]" + " Bloqueo E/S ==> " + evento.getPcb());
+                        view.jTextAreaLog.setText(view.jTextAreaLog.getText() + "[T:" + hora + "]" + " Bloqueo E/S ==> " + evento.getPcb() + "\n");
+                        
+                        break;
+                    case FIN_ES:
+                        PCB flag = evento.getPcb();
+                        flag.setTiempoTotalEYS(flag.getTiempoTotalEYS() + flag.getTiempoEYS());
+                        politica.finEYS(evento.getPcb(), hora, enEYS, listos, ejecucion);
+                        System.out.println("[T:" + hora + "]" + " Fin E/S ==> " + evento.getPcb());
+                        view.jTextAreaLog.setText(view.jTextAreaLog.getText() + "[T:" + hora + "]" + " Fin E/S ==> " + evento.getPcb() + "\n");
+                        
+                        break;
+                    case FIN_SIMULACION:
+                        try {
+                            lectorProcesos.close();
+                        } catch (IOException ex) {
+                        }
+                        System.out.println("--------------Fin Simulacion---------------");
+                        view.jTextAreaLog.setText(view.jTextAreaLog.getText() + "--------------Fin Simulacion---------------" + "\n");
+                        this.view.diagrama.pintar = false;
+                        this.view.jButtonPausar.setEnabled(false);
+                        this.view.jButtonDetener.setEnabled(false);
+                        salir = true;
+                        break;
+                }
             }
 
             if (ejecucion.isEmpty() && !listos.isEmpty()) {
@@ -175,7 +183,7 @@ public class Planificador {
     public Evento siguienteEvento() {
         Evento evento;
 //        ProcStat();
-        while (true) {
+        while (!salir) {
             // Entrada de proceso
             if (procesoFlag != null && hora >= procesoFlag.getHoraLlegada()) {
                 evento = new Evento();
@@ -238,7 +246,7 @@ public class Planificador {
 
             hora++;
             try {
-                Thread.sleep(1000);
+                Thread.sleep(velocidad);
             } catch (InterruptedException ex) {
             }
             view.jLabelTime.setText(hora + "");
@@ -267,6 +275,8 @@ public class Planificador {
             view.jLabelBusy.setText((hora - tiempoOcio) + "");
 
         }
+        
+        return null;
     }
 
     public ArrayList<PCB> obtenerPCBs() {
@@ -343,14 +353,22 @@ public class Planificador {
 
     public void clearData() {
         PCB.NEXT_PID = 0;
+        PCB.NRO_PCB = 0;
         listos.clear();
         bloqueados.clear();
         ejecucion.clear();
         enEYS.clear();
         finalizados.clear();
+        libres = generarPCBsLibres(Parametros.MAX_PCB);
+        minWait = maxWait = meanWait = stdWait = acuWait = 0;
+        minBlock = maxBlock = meanBlock = stdBlock = acuBlock = 0;
+        minExec = maxExec = meanExec = stdExec = acuExec = 0;
+        cont = 0;
         hora = 0;
         tiempoEYS = 0;
         tiempoOcio = 0;
+        this.politica = new RoundRobinSP();
+        salir = false;
         try {
             lectorProcesos.close();
         } catch (IOException ex) {
@@ -360,47 +378,8 @@ public class Planificador {
     }
 
     public static void main(String[] args) {
-//        Proceso p1 = new Proceso(0, 10, 5, TipoProceso.TR);
-//        Proceso p2 = new Proceso(5, 15, 10, TipoProceso.TR);
-//        Proceso p3 = new Proceso(10, 60, 5, TipoProceso.SYS);
-//        Proceso p4 = new Proceso(20, 1699, 5, TipoProceso.BAT);
-//        Proceso p5 = new Proceso(30, 40, 5, TipoProceso.TR);
-//        Proceso p6 = new Proceso(30, 10, 5, TipoProceso.SYS);
-//        Proceso p7 = new Proceso(30, 1000, 5, TipoProceso.INT);
-//        Proceso p8 = new Proceso(30, 100, 5, TipoProceso.BAT);
-//        
-//        PCB pcb1 =  new PCB(p1);
-//        PCB pcb2 =  new PCB(p2);
-//        PCB pcb3 =  new PCB(p3);
-//        PCB pcb4 =  new PCB(p4);
-//        PCB pcb5 =  new PCB(p5);
-//        PCB pcb6 =  new PCB(p6);
-//        PCB pcb7 =  new PCB(p7);
-//        PCB pcb8 =  new PCB(p8);
-//        pcb7.setConsumidoUsoCPU(998);
-//        
-//        ArrayList<PCB> pcbs = new ArrayList();
-//        
-//        Helper.insertarOrdenadoPorUsoCPU(pcbs, pcb1);
-//        Helper.insertarOrdenadoPorUsoCPU(pcbs, pcb2);
-//        Helper.insertarOrdenadoPorUsoCPU(pcbs, pcb3);
-//        Helper.insertarOrdenadoPorUsoCPU(pcbs, pcb4);
-//        
-//        Helper.insertarOrdenadoPorUsoCPU(pcbs, pcb5);
-//        Helper.insertarOrdenadoPorUsoCPU(pcbs, pcb6);
-////        Helper.insertarOrdenadoPorUsoCPU(pcbs, pcb7);
-//        Helper.insertarOrdenadoPorUsoCPU(pcbs, pcb8);
-//        
-//        mostrar_elementos(pcbs);
-//        
-//        System.out.println("TR TR " + TipoProceso.TR.compareTo(TipoProceso.TR));
-//        System.out.println("TR SYS " + TipoProceso.SYS.compareTo(TipoProceso.TR));
-//        
-//        Parametros.QUANTUM = Integer.MAX_VALUE;
-        Planificador p = new Planificador(new PlanificadorGUI());
 
-//        ArrayList<PCB> pcbs = new ArrayList(Parametros.MAX_PCB);
-//        System.out.println(pcbs.get(0));
+        Planificador p = new Planificador(new PlanificadorGUI());
     }
 
     public static void mostrar_elementos(Collection coleccion) {

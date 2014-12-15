@@ -100,15 +100,4 @@ public class DiagramaGantt extends JPanel {
             g2.drawLine(PADDIND_EJE_X - 5, acu, PADDIND_EJE_X + 5, acu);
         }
     }
-
-    public static void main(String[] args) throws InterruptedException {
-        JFrame v = new JFrame();
-        v.setVisible(true);
-        DiagramaGantt diagrama = new DiagramaGantt();
-        v.getContentPane().add(diagrama);
-        v.setSize(500, 540);
-        v.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        
-    }
 }

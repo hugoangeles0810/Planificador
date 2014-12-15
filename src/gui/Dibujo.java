@@ -12,6 +12,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.Line2D;
@@ -44,6 +45,7 @@ public class Dibujo extends JComponent {
     public ArrayList<Shape> shapes;
     public ArrayList<Shape> entradas;
     public ArrayList<Shape> etiquetas;
+    public ArrayList<Shape> finales;
 
     public ArrayList<PCB> pcbs;
     public long tiempo;
@@ -53,6 +55,8 @@ public class Dibujo extends JComponent {
         shapes = new ArrayList();
         colors = new ArrayList();
         entradas = new ArrayList();
+        etiquetas = new ArrayList();
+        finales = new ArrayList();
         this.tiempo = 0;
         setPreferredSize(new Dimension(300 * UNIDAD_TIEMPO + 2 * PADDIND_EJE_X, DIST_PROCESOS * Parametros.MAX_PCB + 3 * PADDIND_EJE_Y));
     }
@@ -98,9 +102,18 @@ public class Dibujo extends JComponent {
             g2.fill(s);
         }
         
+        g2.setColor(Color.CYAN);
+        for (Shape s : finales) {
+            g2.fill(s);
+        }
+        
+        g2.setStroke(new BasicStroke(0.2f));
+        g2.setRenderingHint(
+                RenderingHints.KEY_TEXT_ANTIALIASING,
+                RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
         g2.setColor(Color.BLACK);
         for (Shape s : etiquetas) {
-            g2.fill(s);
+            g2.draw(s);
         }
 
     }
@@ -157,12 +170,19 @@ public class Dibujo extends JComponent {
 
     public void dibujaEntradaProceso(PCB pcb) {
         Graphics2D g2 = (Graphics2D) getGraphics();
-        Font f = new Font("Arial", Font.PLAIN, 10);
+        Font f = new Font(g2.getFont().getName(), Font.PLAIN, 10);
         int pos_y = this.getHeight() - PADDIND_EJE_Y * 2;
         Rectangle2D rect = crearRect((int) (tiempo) * UNIDAD_TIEMPO + PADDIND_EJE_X - 10, pos_y - (int) pcb.getNRO() * DIST_PROCESOS - 10, 20, 20);
         entradas.add(rect);
-        Shape etiqueta = f.createGlyphVector(g2.getFontRenderContext(), "P: " + pcb.getPID()).getOutline((int) (tiempo) * UNIDAD_TIEMPO + PADDIND_EJE_X, pos_y - (int) pcb.getNRO() * DIST_PROCESOS);
+        Shape etiqueta = f.createGlyphVector(getFontMetrics(f).getFontRenderContext(), pcb.getPID() + "").getOutline((int) (tiempo) * UNIDAD_TIEMPO + PADDIND_EJE_X, pos_y - (int) pcb.getNRO() * DIST_PROCESOS);
         etiquetas.add(etiqueta);
+    }
+    
+    public void dibujaFinalProceso(PCB pcb) {
+        Graphics2D g2 = (Graphics2D) getGraphics();
+        int pos_y = this.getHeight() - PADDIND_EJE_Y * 2;
+        Rectangle2D rect = crearRect((int) (tiempo) * UNIDAD_TIEMPO + PADDIND_EJE_X - 10, pos_y - (int) pcb.getNRO() * DIST_PROCESOS - 10, 20, 20);
+        finales.add(rect);
     }
 
     public Color getColorEstados(int estado) {

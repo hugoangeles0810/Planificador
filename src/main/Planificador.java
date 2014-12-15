@@ -118,6 +118,7 @@ public class Planificador {
                     break;
                 case FIN_PROCESO_ACTIVO:
                     politica.finProcesoActivo(evento.getPcb(), ejecucion, hora);
+                    view.diagrama.dibujaFinalProceso(evento.getPcb());
                     System.out.println("[T:" + hora + "]" + " Fin de Proceso ==> " + evento.getPcb());
                     view.jTextAreaLog.setText(view.jTextAreaLog.getText() + "[T:" + hora + "]" + " Fin de Proceso ==> " + evento.getPcb() + "\n");
                     finalizados.add(evento.getPcb().clone());

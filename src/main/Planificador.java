@@ -159,23 +159,6 @@ public class Planificador {
                         break;
                 }
             }
-
-            if (ejecucion.isEmpty() && !listos.isEmpty()) {
-                listos.get(0).setEstado(EstadoPCB.EJECUCION);
-                ejecucion.add(listos.get(0));
-                listos.remove(0);
-                System.out.println("[T:" + hora + "]" + " Ejecuta Proceso ==> " + ejecucion.get(0));
-                view.jTextAreaLog.setText(view.jTextAreaLog.getText() + "[T:" + hora + "]" + " Ejecuta Proceso ==> " + ejecucion.get(0) + "\n");
-            }
-
-            if (!bloqueados.isEmpty() && enEYS.isEmpty()) {
-                bloqueados.get(0).setEstado(EstadoPCB.EYS);
-                enEYS.add(bloqueados.get(0));
-                bloqueados.remove(0);
-                System.out.println("[T:" + hora + "]" + " Inicio E/S ==> " + enEYS.get(0));
-                view.jTextAreaLog.setText(view.jTextAreaLog.getText() + "[T:" + hora + "]" + " Inicio E/S ==> " + enEYS.get(0) + "\n");
-
-            }
         }
 
     }
@@ -184,15 +167,6 @@ public class Planificador {
         Evento evento;
 //        ProcStat();
         while (!salir) {
-            // Entrada de proceso
-            if (procesoFlag != null && hora >= procesoFlag.getHoraLlegada()) {
-                evento = new Evento();
-                evento.setTipo(TipoEvento.ENTRADA_NUEVO_PROCESO);
-                evento.setProceso(procesoFlag);
-                evento.setReloj(hora);
-                return evento;
-            }
-
             // Fin de proceso
             if (!ejecucion.isEmpty()
                     && ejecucion.get(0).estaTerminado()) {
@@ -202,6 +176,17 @@ public class Planificador {
                 evento.setReloj(hora);
                 return evento;
             }
+            
+            // Entrada de proceso
+            if (procesoFlag != null && hora >= procesoFlag.getHoraLlegada()) {
+                evento = new Evento();
+                evento.setTipo(TipoEvento.ENTRADA_NUEVO_PROCESO);
+                evento.setProceso(procesoFlag);
+                evento.setReloj(hora);
+                return evento;
+            }
+
+            
 
             // Peticion de E/S
             if (!ejecucion.isEmpty()
@@ -242,6 +227,23 @@ public class Planificador {
                 evento.setProceso(procesoFlag);
                 evento.setReloj(hora);
                 return evento;
+            }
+            
+            if (ejecucion.isEmpty() && !listos.isEmpty()) {
+                listos.get(0).setEstado(EstadoPCB.EJECUCION);
+                ejecucion.add(listos.get(0));
+                listos.remove(0);
+                System.out.println("[T:" + hora + "]" + " Ejecuta Proceso ==> " + ejecucion.get(0));
+                view.jTextAreaLog.setText(view.jTextAreaLog.getText() + "[T:" + hora + "]" + " Ejecuta Proceso ==> " + ejecucion.get(0) + "\n");
+            }
+
+            if (!bloqueados.isEmpty() && enEYS.isEmpty()) {
+                bloqueados.get(0).setEstado(EstadoPCB.EYS);
+                enEYS.add(bloqueados.get(0));
+                bloqueados.remove(0);
+                System.out.println("[T:" + hora + "]" + " Inicio E/S ==> " + enEYS.get(0));
+                view.jTextAreaLog.setText(view.jTextAreaLog.getText() + "[T:" + hora + "]" + " Inicio E/S ==> " + enEYS.get(0) + "\n");
+
             }
 
             hora++;

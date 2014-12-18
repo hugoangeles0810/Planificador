@@ -829,19 +829,22 @@ public class PlanificadorGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jRadioButtonRRSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonRRSPActionPerformed
+        Parametros.QUANTUM = 10;
         planf.politica = new RoundRobinSP();
-        System.out.println("aaaaa");
     }//GEN-LAST:event_jRadioButtonRRSPActionPerformed
 
     private void jRadioButtonPrioridadesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonPrioridadesActionPerformed
+        Parametros.QUANTUM = 10;
         planf.politica = new RoundRobinCP();
     }//GEN-LAST:event_jRadioButtonPrioridadesActionPerformed
 
     private void jRadioButtonSJFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonSJFActionPerformed
+        Parametros.QUANTUM = Integer.MAX_VALUE;
         planf.politica = new SJF();
     }//GEN-LAST:event_jRadioButtonSJFActionPerformed
 
     private void jRadioButtonSRTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonSRTActionPerformed
+        Parametros.QUANTUM = Integer.MAX_VALUE;
         planf.politica = new SRT();
     }//GEN-LAST:event_jRadioButtonSRTActionPerformed
 

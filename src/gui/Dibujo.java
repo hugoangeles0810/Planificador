@@ -178,9 +178,8 @@ public class Dibujo extends JComponent {
     }
     
     public void dibujaFinalProceso(PCB pcb) {
-        Graphics2D g2 = (Graphics2D) getGraphics();
         int pos_y = this.getHeight() - PADDIND_EJE_Y * 2;
-        Rectangle2D rect = crearRect((int) (tiempo) * UNIDAD_TIEMPO + PADDIND_EJE_X - 10, pos_y - (int) pcb.getNRO() * DIST_PROCESOS - 10, 20, 20);
+        Rectangle2D rect = crearRect((int) (tiempo) * UNIDAD_TIEMPO + PADDIND_EJE_X - 5, pos_y - (int) pcb.getNRO() * DIST_PROCESOS - 15, 10, 30);
         finales.add(rect);
     }
 
